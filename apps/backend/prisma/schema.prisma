@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// User Profiles (managed via Supabase Auth triggers usually)
+model Profile {
+  id           String   @id @default(uuid()) @db.Uuid // Matches auth.users PK
+  fullName     String?  @map("full_name")
+  cnpj         String?
+  businessName String?  @map("business_name")
+  phone        String?
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("profiles")
+}
+
+model Customer {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  name      String
+  document  String?
+  phone     String?
+  email     String?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  // Relations
+  orders    ServiceOrder[]
+
+  @@map("customers")
+}
+
+model ServiceCatalog {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  name         String
+  description  String?
+  defaultPrice Decimal? @map("default_price") @db.Decimal(10, 2)
+  category     String?
+
+  // Relations
+  orderItems   OrderItem[]
+
+  @@map("service_catalog")
+}
+
+model ServiceOrder {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  customerId  String?   @map("customer_id") @db.Uuid
+  status      String?   @default("rascunho")
+  totalAmount Decimal?  @map("total_amount") @db.Decimal(10, 2)
+  notes       String?
+  dueDate     DateTime? @map("due_date") @db.Date
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  // Relations
+  customer    Customer?          @relation(fields: [customerId], references: [id])
+  items       OrderItem[]
+  financials  FinancialEntry[]
+
+  @@map("service_orders")
+}
+
+model OrderItem {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId     String?  @map("order_id") @db.Uuid
+  serviceId   String?  @map("service_id") @db.Uuid
+  description String?
+  quantity    Int?     @default(1)
+  unitPrice   Decimal? @map("unit_price") @db.Decimal(10, 2)
+  totalPrice  Decimal? @map("total_price") @db.Decimal(10, 2)
+
+  // Relations
+  order       ServiceOrder?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  service     ServiceCatalog? @relation(fields: [serviceId], references: [id])
+
+  @@map("order_items")
+}
+
+model FinancialEntry {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String        @map("user_id") @db.Uuid
+  type        String
+  category    String?
+  amount      Decimal       @db.Decimal(10, 2)
+  description String?
+  date        DateTime      @db.Date
+  orderId     String?       @map("order_id") @db.Uuid
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz
+
+  // Relations
+  order       ServiceOrder? @relation(fields: [orderId], references: [id])
+
+  @@map("financial_entries")
+}
