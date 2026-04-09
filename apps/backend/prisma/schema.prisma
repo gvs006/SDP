@@ -99,3 +99,59 @@ model FinancialEntry {
 
   @@map("financial_entries")
 }
+
+// ═══════════════════════════════════════════════════
+// Sabor do Parque — Product Catalog
+// ═══════════════════════════════════════════════════
+
+model Ingredient {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key         String  @unique          // ex: "leiteCondensado", "morango"
+  name        String                   // ex: "Leite Condensado", "Morango"
+  costPerUnit Decimal @map("cost_per_unit") @db.Decimal(10, 4) // custo por unidade
+  unit        String? @default("g")    // g, ml, un
+
+  usages      FlavorIngredient[]
+
+  @@map("ingredients")
+}
+
+model Flavor {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  externalId  String  @unique @map("external_id") // ex: "ninho-morango"
+  name        String                                // ex: "Ninho c/ Morango"
+  linha       String                                // "Gourmet" | "Refrescante"
+  preco       Decimal @db.Decimal(10, 2)            // preço de venda
+  rendimento  Int                                   // unidades por batelada
+
+  ingredients FlavorIngredient[]
+  stock       StockEntry?
+
+  @@map("flavors")
+}
+
+model FlavorIngredient {
+  id           String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  flavorId     String @map("flavor_id") @db.Uuid
+  ingredientId String @map("ingredient_id") @db.Uuid
+  quantity     Decimal @db.Decimal(10, 4)     // quantidade usada na batelada
+  source       String  @default("extra")      // "base" | "extra" | "embalagem"
+
+  flavor       Flavor     @relation(fields: [flavorId], references: [id], onDelete: Cascade)
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@unique([flavorId, ingredientId, source])
+  @@map("flavor_ingredients")
+}
+
+model StockEntry {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  flavorId  String   @unique @map("flavor_id") @db.Uuid
+  quantity  Int      @default(0)
+  minStock  Int      @default(5) @map("min_stock")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  flavor    Flavor   @relation(fields: [flavorId], references: [id], onDelete: Cascade)
+
+  @@map("stock_entries")
+}

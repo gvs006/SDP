@@ -1,14 +1,23 @@
 {
-  "name": "mei-manager",
+  "name": "sdp",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@10.15.1",
   "scripts": {
     "dev": "node scripts/sync-env.js && turbo run dev",
+    "dev:backend": "node scripts/sync-env.js && cd apps/backend && pnpm run start:dev",
+    "dev:all": "node scripts/sync-env.js && concurrently --names \"API,FLUTTER\" --prefix-colors \"blue,green\" \"cd apps/backend && pnpm run start:dev\" \"cd apps/mobile && flutter run\"",
     "build": "node scripts/sync-env.js && turbo run build",
+    "build:apk": "cd apps/mobile && flutter build apk --release",
     "lint": "turbo run lint",
-    "build:all": "pnpm build"
+    "db:generate": "cd apps/backend && npx prisma generate",
+    "db:migrate": "cd apps/backend && npx prisma migrate dev",
+    "db:seed": "cd apps/backend && npx ts-node prisma/seed.ts",
+    "db:studio": "cd apps/backend && npx prisma studio",
+    "mobile:codegen": "cd apps/mobile && dart run build_runner build --delete-conflicting-outputs"
   },
   "devDependencies": {
-    "turbo": "latest"
+    "turbo": "latest",
+    "concurrently": "^9.1.2"
   }
 }
