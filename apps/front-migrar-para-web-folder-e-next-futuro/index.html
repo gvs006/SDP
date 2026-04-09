@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sabor do Parque Gourmet — Sistema de gestão interno para picolés artesanais. PDV, estoque, custos e vendas.">
+  <meta name="theme-color" content="#1D3927">
+  <title>Sabor do Parque — Sistema</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     LOGIN
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <span class="logo-icon">🍧</span>
+      <h1>Sabor do Parque</h1>
+      <p>Sistema de gestão interno</p>
+    </div>
+    <label for="login-user">Usuário</label>
+    <input type="text" id="login-user" placeholder="usuario" autocomplete="username">
+    <label for="login-pass">Senha</label>
+    <input type="password" id="login-pass" placeholder="••••••" autocomplete="current-password">
+    <button class="login-btn" onclick="doLogin()">Entrar</button>
+    <p class="login-err" id="login-err">Usuário ou senha incorretos.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     APP SHELL
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <h2>🍧 Sabor do Parque</h2>
+      <span>Gourmet — Sistema</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" onclick="navTo('dashboard')">
+        <span class="nav-icon">📊</span> Dashboard
+      </div>
+      <div class="nav-item" onclick="navTo('pdv')">
+        <span class="nav-icon">🛒</span> PDV
+      </div>
+      <div class="nav-item" onclick="navTo('estoque')">
+        <span class="nav-icon">📦</span> Estoque
+      </div>
+      <div class="nav-item" onclick="navTo('vendas')">
+        <span class="nav-icon">💰</span> Vendas
+      </div>
+      <div class="nav-item" onclick="navTo('compras')">
+        <span class="nav-icon">🛍️</span> Compras
+      </div>
+      <div class="nav-item" onclick="navTo('custos')">
+        <span class="nav-icon">🧮</span> Custos
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="doLogout()">⬅ Sair</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- ── DASHBOARD ──────────────────────────────────────────────── -->
+    <div id="page-dashboard" class="page active">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <p id="dash-date"></p>
+      </div>
+      <div class="metrics" id="dash-metrics"></div>
+      <div class="dash-grid">
+        <div class="card">
+          <div class="card-header"><h3>Vendas por sabor (hoje)</h3></div>
+          <div class="card-body" id="dash-top-flavors"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Estoque baixo</h3></div>
+          <div class="card-body" id="dash-low-stock"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Últimas vendas</h3></div>
+        <div class="card-body" id="dash-recent-sales"></div>
+      </div>
+    </div>
+
+    <!-- ── PDV ────────────────────────────────────────────────────── -->
+    <div id="page-pdv" class="page">
+      <div class="page-header flex-between">
+        <div>
+          <h1>PDV — Ponto de Venda</h1>
+          <p>Registre vendas por unidade ou combo</p>
+        </div>
+      </div>
+      <div class="pdv-grid">
+        <div>
+          <div class="section-label">Linha Gourmet</div>
+          <div class="flavor-grid" id="pdv-gourmet"></div>
+          <div class="divider"></div>
+          <div class="section-label">Linha Refrescante</div>
+          <div class="flavor-grid" id="pdv-refres"></div>
+        </div>
+        <div class="cart-panel">
+          <div class="cart-header">🛒 Carrinho</div>
+          <div class="cart-items" id="cart-items">
+            <p class="empty-state">Nenhum item adicionado</p>
+          </div>
+          <div class="cart-footer">
+            <div class="cart-total">
+              <span class="tl">Total</span>
+              <span class="tv" id="cart-total">R$ 0,00</span>
+            </div>
+            <div class="section-label">Forma de pagamento</div>
+            <div class="payment-row" id="payment-row">
+              <button class="pay-btn active" onclick="selPay(this,'Pix')">Pix</button>
+              <button class="pay-btn" onclick="selPay(this,'Débito')">Débito</button>
+              <button class="pay-btn" onclick="selPay(this,'Crédito')">Crédito</button>
+              <button class="pay-btn" onclick="selPay(this,'Dinheiro')">Dinheiro</button>
+            </div>
+            <button class="btn btn-success" style="width:100%;justify-content:center;margin-top:6px" onclick="finalizeSale()">✔ Finalizar Venda</button>
+            <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;margin-top:10px" onclick="clearCart()">Limpar carrinho</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ESTOQUE ────────────────────────────────────────────────── -->
+    <div id="page-estoque" class="page">
+      <div class="page-header flex-between">
+        <div>
+          <h1>Estoque</h1>
+          <p>Controle de unidades disponíveis por sabor</p>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-ajuste')">+ Ajuste de estoque</button>
+      </div>
+      <div class="metrics" id="stock-metrics"></div>
+      <div class="card">
+        <div class="card-header">
+          <h3>Estoque atual</h3>
+          <div class="gap-8">
+            <span class="badge badge-primary" id="stock-total-badge"></span>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table id="stock-table">
+            <thead>
+              <tr>
+                <th>Sabor</th>
+                <th>Linha</th>
+                <th>Estoque atual</th>
+                <th>Mínimo</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="stock-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── VENDAS ─────────────────────────────────────────────────── -->
+    <div id="page-vendas" class="page">
+      <div class="page-header">
+        <h1>Histórico de Vendas</h1>
+        <p>Todas as transações registradas</p>
+      </div>
+      <div class="metrics" id="vendas-metrics"></div>
+      <div class="card">
+        <div class="card-header flex-between">
+          <h3>Transações</h3>
+          <div class="gap-8">
+            <select id="filtro-pagamento" onchange="renderVendas()" class="filter-select">
+              <option value="">Todos pagamentos</option>
+              <option>Pix</option>
+              <option>Débito</option>
+              <option>Crédito</option>
+              <option>Dinheiro</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Data/Hora</th>
+                <th>Itens</th>
+                <th>Pagamento</th>
+                <th>Total</th>
+                <th>Lucro</th>
+              </tr>
+            </thead>
+            <tbody id="vendas-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── COMPRAS ────────────────────────────────────────────────── -->
+    <div id="page-compras" class="page">
+      <div class="page-header flex-between">
+        <div>
+          <h1>Compras e Gastos</h1>
+          <p>Registro de entradas de ingredientes e despesas</p>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-compra')">+ Nova compra</button>
+      </div>
+      <div class="metrics" id="compras-metrics"></div>
+      <div class="card">
+        <div class="card-header"><h3>Histórico de compras</h3></div>
+        <div class="card-body" style="padding:0">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Descrição</th>
+                <th>Categoria</th>
+                <th>Fornecedor</th>
+                <th>Valor (R$)</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="compras-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CUSTOS ─────────────────────────────────────────────────── -->
+    <div id="page-custos" class="page">
+      <div class="page-header flex-between">
+        <div>
+          <h1>Tabela de Custos</h1>
+          <p>Custo por unidade e margem de lucro de cada sabor</p>
+        </div>
+        <button class="btn btn-gold" onclick="exportCustosCSV()">📥 Exportar CSV</button>
+      </div>
+      <div class="page-tabs">
+        <div class="page-tab active" onclick="custoTab('gourmet',this)">Linha Gourmet</div>
+        <div class="page-tab" onclick="custoTab('refrescante',this)">Linha Refrescante</div>
+      </div>
+      <div id="custo-gourmet">
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <table id="custo-table-g">
+              <thead>
+                <tr>
+                  <th>Sabor</th>
+                  <th>Custo/und (R$)</th>
+                  <th>Preço venda (R$)</th>
+                  <th>Lucro/und (R$)</th>
+                  <th>Margem (%)</th>
+                </tr>
+              </thead>
+              <tbody id="custo-tbody-g"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div id="custo-refrescante" style="display:none">
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <table id="custo-table-r">
+              <thead>
+                <tr>
+                  <th>Sabor</th>
+                  <th>Custo/und (R$)</th>
+                  <th>Preço venda (R$)</th>
+                  <th>Lucro/und (R$)</th>
+                  <th>Margem (%)</th>
+                </tr>
+              </thead>
+              <tbody id="custo-tbody-r"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     MODALS
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<!-- Modal Ajuste Estoque -->
+<div class="modal-overlay" id="modal-ajuste">
+  <div class="modal">
+    <h3>Ajuste de Estoque</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="adj-flavor">Sabor</label>
+        <select id="adj-flavor"></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="adj-type">Tipo</label>
+        <select id="adj-type">
+          <option value="set">Definir quantidade</option>
+          <option value="add">Adicionar ao estoque</option>
+          <option value="sub">Remover do estoque</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="adj-qty">Quantidade</label>
+        <input type="number" id="adj-qty" min="0" value="0">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-ajuste')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveAdjuste()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Nova Compra -->
+<div class="modal-overlay" id="modal-compra">
+  <div class="modal">
+    <h3>Registrar Compra / Gasto</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="comp-desc">Descrição</label>
+        <input type="text" id="comp-desc" placeholder="Ex: Leite condensado Manos Doce">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="comp-cat">Categoria</label>
+        <select id="comp-cat">
+          <option>Matéria prima</option>
+          <option>Embalagem</option>
+          <option>Transporte</option>
+          <option>MEI / Impostos</option>
+          <option>Equipamento</option>
+          <option>Outros</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="comp-forn">Fornecedor</label>
+        <input type="text" id="comp-forn" placeholder="Ex: Manos Doce">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="comp-valor">Valor (R$)</label>
+        <input type="number" id="comp-valor" step="0.01" min="0" placeholder="0.00">
+      </div>
+      <div class="form-group">
+        <label for="comp-data">Data</label>
+        <input type="date" id="comp-data">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-compra')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveCompra()">Registrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Scripts -->
+<script src="app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,271 @@
+{
+  "ingredientCosts": {
+    "leiteCondensado": 7.15,
+    "cremeleite": 1.70,
+    "leite": 0.00449,
+    "leitePo": 0.0392,
+    "leiteNinho": 0.052,
+    "morango": 0.01252,
+    "maracuja": 0.012,
+    "manga": 0.015,
+    "goiaba": 0.0125,
+    "abacaxi": 7.00,
+    "uva": 15.00,
+    "limao": 0.60,
+    "nutela": 0.0506,
+    "ligaNeutra": 0.0335,
+    "acucar": 0.005,
+    "bolacha": 1.85,
+    "ovos": 0.80,
+    "essBaunilha": 0.27,
+    "essAvela": 0.34967,
+    "ovoCreme": 0.0074,
+    "ovoPo": 0.00772,
+    "amendoim": 0.01572,
+    "cacau": 0.03547,
+    "saqG": 0.0767,
+    "saqN": 0.098,
+    "embG": 0.185,
+    "adesivo": 0.040
+  },
+  "bases": {
+    "baseG": [
+      ["leiteCondensado", 1],
+      ["cremeleite", 100],
+      ["leite", 1000],
+      ["leitePo", 50],
+      ["ligaNeutra", 20]
+    ],
+    "baseGN": [
+      ["leiteCondensado", 1],
+      ["cremeleite", 100],
+      ["leite", 1000],
+      ["leitePo", 50],
+      ["leiteNinho", 100],
+      ["ligaNeutra", 20]
+    ],
+    "baseR": [
+      ["acucar", 50],
+      ["ligaNeutra", 10]
+    ]
+  },
+  "embalagens": {
+    "embG": [
+      ["saqG", 1],
+      ["embG", 1],
+      ["adesivo", 1]
+    ],
+    "embR": [
+      ["saqN", 1],
+      ["adesivo", 1]
+    ]
+  },
+  "flavors": [
+    {
+      "id": "ninho-morango",
+      "name": "Ninho c/ Morango",
+      "linha": "Gourmet",
+      "preco": 12.00,
+      "custoUnit": 2.22,
+      "rendimento": 13,
+      "base": "baseGN",
+      "extras": [["morango", 300]],
+      "embalagem": "embG"
+    },
+    {
+      "id": "ninho-nutella",
+      "name": "Ninho c/ Nutella",
+      "linha": "Gourmet",
+      "preco": 12.00,
+      "custoUnit": 2.32,
+      "rendimento": 13,
+      "base": "baseGN",
+      "extras": [["nutela", 100]],
+      "embalagem": "embG"
+    },
+    {
+      "id": "maracuja-nutella",
+      "name": "Maracujá c/ Nutella",
+      "linha": "Gourmet",
+      "preco": 12.00,
+      "custoUnit": 2.10,
+      "rendimento": 13,
+      "base": "baseG",
+      "extras": [["maracuja", 200], ["nutela", 100]],
+      "embalagem": "embG"
+    },
+    {
+      "id": "morango-nutella",
+      "name": "Morango c/ Nutella",
+      "linha": "Gourmet",
+      "preco": 12.00,
+      "custoUnit": 2.11,
+      "rendimento": 13,
+      "base": "baseG",
+      "extras": [["morango", 200], ["nutela", 100]],
+      "embalagem": "embG"
+    },
+    {
+      "id": "morango-geleia",
+      "name": "Morango c/ Geleia",
+      "linha": "Gourmet",
+      "preco": 12.00,
+      "custoUnit": 1.93,
+      "rendimento": 13,
+      "base": "baseG",
+      "extras": [["morango", 400], ["acucar", 50]],
+      "embalagem": "embG"
+    },
+    {
+      "id": "maracuja-geleia",
+      "name": "Maracujá c/ Geleia",
+      "linha": "Gourmet",
+      "preco": 12.00,
+      "custoUnit": 1.83,
+      "rendimento": 13,
+      "base": "baseG",
+      "extras": [["maracuja", 300], ["acucar", 50]],
+      "embalagem": "embG"
+    },
+    {
+      "id": "uva-geleia",
+      "name": "Uva c/ Geleia de Uva",
+      "linha": "Gourmet",
+      "preco": 12.00,
+      "custoUnit": 2.70,
+      "rendimento": 13,
+      "base": "baseG",
+      "extras": [["uva", 1], ["acucar", 50]],
+      "embalagem": "embG"
+    },
+    {
+      "id": "tortinha-limao",
+      "name": "Tortinha de Limão",
+      "linha": "Gourmet",
+      "preco": 12.00,
+      "custoUnit": 1.83,
+      "rendimento": 13,
+      "base": "baseG",
+      "extras": [["limao", 3], ["acucar", 40], ["bolacha", 1]],
+      "embalagem": "embG"
+    },
+    {
+      "id": "ovomaltine",
+      "name": "Ovomaltine",
+      "linha": "Gourmet",
+      "preco": 12.00,
+      "custoUnit": 1.71,
+      "rendimento": 13,
+      "base": "baseG",
+      "extras": [["ovoPo", 50], ["ovoCreme", 260]],
+      "embalagem": "embG"
+    },
+    {
+      "id": "ferrero",
+      "name": "Ferrero (Avelã)",
+      "linha": "Gourmet",
+      "preco": 12.00,
+      "custoUnit": 2.89,
+      "rendimento": 13,
+      "base": "baseG",
+      "extras": [["nutela", 200], ["amendoim", 55], ["cacau", 40], ["essAvela", 15]],
+      "embalagem": "embG"
+    },
+    {
+      "id": "manga-cremosa",
+      "name": "Manga Cremosa",
+      "linha": "Gourmet",
+      "preco": 12.00,
+      "custoUnit": 1.88,
+      "rendimento": 13,
+      "base": "baseG",
+      "extras": [["manga", 300]],
+      "embalagem": "embG"
+    },
+    {
+      "id": "pudim",
+      "name": "Pudim",
+      "linha": "Gourmet",
+      "preco": 12.00,
+      "custoUnit": 2.34,
+      "rendimento": 13,
+      "base": null,
+      "extras": [
+        ["leiteCondensado", 2],
+        ["cremeleite", 200],
+        ["leite", 500],
+        ["ovos", 6],
+        ["acucar", 100],
+        ["essBaunilha", 2],
+        ["ligaNeutra", 20]
+      ],
+      "embalagem": "embG"
+    },
+    {
+      "id": "manga-r",
+      "name": "Manga",
+      "linha": "Refrescante",
+      "preco": 8.00,
+      "custoUnit": 0.48,
+      "rendimento": 15,
+      "base": "baseR",
+      "extras": [["manga", 300]],
+      "embalagem": "embR"
+    },
+    {
+      "id": "abacaxi-r",
+      "name": "Abacaxi",
+      "linha": "Refrescante",
+      "preco": 8.00,
+      "custoUnit": 0.64,
+      "rendimento": 15,
+      "base": "baseR",
+      "extras": [["abacaxi", 1]],
+      "embalagem": "embR"
+    },
+    {
+      "id": "morango-r",
+      "name": "Morango",
+      "linha": "Refrescante",
+      "preco": 8.00,
+      "custoUnit": 0.43,
+      "rendimento": 15,
+      "base": "baseR",
+      "extras": [["morango", 300]],
+      "embalagem": "embR"
+    },
+    {
+      "id": "maracuja-r",
+      "name": "Maracujá",
+      "linha": "Refrescante",
+      "preco": 8.00,
+      "custoUnit": 0.42,
+      "rendimento": 15,
+      "base": "baseR",
+      "extras": [["maracuja", 300]],
+      "embalagem": "embR"
+    },
+    {
+      "id": "goiaba-r",
+      "name": "Goiaba",
+      "linha": "Refrescante",
+      "preco": 8.00,
+      "custoUnit": 0.43,
+      "rendimento": 15,
+      "base": "baseR",
+      "extras": [["goiaba", 300]],
+      "embalagem": "embR"
+    },
+    {
+      "id": "uva-r",
+      "name": "Uva",
+      "linha": "Refrescante",
+      "preco": 8.00,
+      "custoUnit": 1.18,
+      "rendimento": 15,
+      "base": "baseR",
+      "extras": [["uva", 1]],
+      "embalagem": "embR"
+    }
+  ]
+}
