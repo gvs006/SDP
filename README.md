@@ -89,22 +89,6 @@ SDP/
 
 ---
 
-## 🔢 Análise de Custos — Correções Identificadas
-
-O sistema revelou discrepâncias significativas entre os custos declarados no legado e os custos reais calculados:
-
-| Sabor | Custo Legado | Custo Real | Status |
-|-------|-------------|------------|--------|
-| Ninho c/ Morango | R$ 2,22 | R$ 15,17 | ❌ Subestimado |
-| Pudim | R$ 2,34 | R$ 28,23 | ❌ Subestimado |
-| Ferrero (Avelã) | R$ 2,89 | R$ 15,83 | ❌ Subestimado |
-| Manga (Refrescante) | R$ 0,48 | R$ 0,48 | ✅ Correto |
-| Maracujá (Refrescante) | R$ 0,42 | R$ 0,42 | ✅ Correto |
-
-> **Causa raiz**: O legado não somava o custo da base (leite condensado R$7,15 + creme de leite R$1,70) no cálculo unitário dos sabores Gourmet. Os Refrescantes estão corretos porque usam uma base barata (apenas açúcar + liga neutra).
-
----
-
 ## 🚀 Setup & Desenvolvimento
 
 ### Pré-requisitos
